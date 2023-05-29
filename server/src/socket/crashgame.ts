@@ -36,7 +36,7 @@ export const startTimer = () => {
   var timer = setInterval(() => {
     time += 0.1;
     if (state === states.loading && time > loadingTime)
-      startGame(), (crashPoint = Math.floor(Math.random() * 20));
+      startGame(), (crashPoint = Math.ceil(Math.random() * 30) + 4);
     else if (state === states.playing && time > crashPoint) finishGame();
     else if (state === states.crash && time > crashTime) initGame();
   }, 100);

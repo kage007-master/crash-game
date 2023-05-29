@@ -36,10 +36,13 @@ export default function Dropdown(props: any) {
   return (
     <div ref={dropdownRef} className="relative flex items-center">
       <div onClick={toggleDropdown}>
-        <div className="flex justify-center items-center md:border border-border rounded-xl md:p-4 gap-2 text-base cursor-pointer">
-          <MainCoin className="w-0 h-6 md:w-6"></MainCoin>
-          <div className="hidden md:flex gap-1">
-            {auth.user.balance[chain]} <div className="uppercase">{chain}</div>
+        <div className="flex justify-between items-center md:border border-border rounded-xl md:p-4 gap-2 text-base cursor-pointer">
+          <div className="flex items-center gap-2">
+            <MainCoin className="w-0 h-6 md:w-6"></MainCoin>
+            <div className="hidden md:flex gap-1">
+              {auth.user.balance[chain]}{" "}
+              <div className="uppercase">{chain}</div>
+            </div>
           </div>
           <Iconify
             icon={"material-symbols:keyboard-arrow-down-rounded"}
@@ -49,9 +52,9 @@ export default function Dropdown(props: any) {
       </div>
       {isOpen && (
         <div
-          className={`hidden absolute md:top-[110%] md:left-0 bg-border rounded-md z-30 py-2 shadow-md anim-dropdown gap-2 md:flex flex-col min-w-[150px]`}
+          className={`hidden absolute md:top-[110%] md:left-0 bg-border rounded-md z-30 py-2 shadow-md anim-dropdown gap-2 md:flex flex-col right-[-65px]`}
         >
-          <div className="flex items-center gap-2  px-2 py-1">
+          <div className="flex items-center gap-2 px-2 py-1">
             <img
               alt="avatar"
               src={auth.user.avatar}
@@ -59,18 +62,16 @@ export default function Dropdown(props: any) {
             />
             <div className="text-indigo">{auth.user.name}</div>
           </div>
-          <div className="border-t border-indigo/10 mx-3"></div>
-          <div className=" h-[160px] overflow-y-auto mr-1">
+          <div className="border-t border-indigo/10 mx-2"></div>
+          <div className=" h-[160px] overflow-y-auto mx-2">
             {Object.keys(auth.user.balance).map((currency: string) => {
               const CoinIcon = coinSVG[currency];
-              return (
+              return currency === chain ? (
+                <></>
+              ) : (
                 <div
                   key={currency}
-                  className={`flex py-1 px-2 gap-2 text-xs items-center cursor-pointer ${
-                    currency === chain
-                      ? "text-bright bg-indigo/10"
-                      : " hover:bg-indigo/5"
-                  }`}
+                  className="flex py-3 gap-2 text-xs items-center cursor-pointer hover:bg-indigo/5"
                   onClick={() => {
                     setIsOpen(false);
                     dispatch(setChain(currency));
@@ -83,14 +84,14 @@ export default function Dropdown(props: any) {
               );
             })}
           </div>
-          <div className="border-b border-indigo/10 mx-3"></div>
+          {/* <div className="border-b border-indigo/10 mx-3"></div>
           <div
             className="flex gap-2  items-center hover:bg-indigo/5 px-2 py-1 cursor-pointer text-sm"
             onClick={props.handleLogout}
           >
             <Iconify icon={"humbleicons:logout"} className="w-6 h-6" />
             <div>Logout</div>
-          </div>
+          </div> */}
         </div>
       )}
       <div className="flex justify-center items-center md:hidden border-border p-3 md:p-4 gap-2 text-base cursor-pointer">

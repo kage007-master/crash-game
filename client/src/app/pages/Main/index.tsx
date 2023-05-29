@@ -54,7 +54,7 @@ const Main = () => {
                   >
                     <div
                       className={
-                        "px-4 py-2 lg:px-4 lg:py-4 " +
+                        "px-4 py-2 lg:py-4 " +
                         (tabActive == item.text && "text-white")
                       }
                     >

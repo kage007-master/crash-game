@@ -67,28 +67,35 @@ const UserTable = () => {
         {players.map((player: any, id: number) => {
           const CoinIcon = coinSVG[player.chain];
           return (
-            <div className="relative uppercase" key={"player" + id}>
-              <div className="flex justify-between border-b border-[#37374D]">
+            <div
+              className={`relative ${
+                player.cashPoint > 0
+                  ? "text-[#34c2e6]"
+                  : gameState.state === constStates.crash
+                  ? "text-red-500"
+                  : "text-[#4d555f]"
+              }`}
+              key={"player" + id}
+            >
+              <div className="uppercase flex justify-between border-b border-[#37374D] py-1">
                 <div className="w-[50%] border-r border-[#37374D]">
-                  <div className="py-1">Bet</div>
-                  <div className="flex items-center gap-2">
+                  <div className="text-secondary py-1">Bet</div>
+                  <div className="flex items-center gap-2 py-1">
                     <CoinIcon className="w-4 h-4 flex-none"></CoinIcon>
-                    <div className="text-white text-sm py-1">
-                      {player.betAmount.toFixed(8)}
-                    </div>
+                    <div className="text-sm">{player.betAmount.toFixed(8)}</div>
                   </div>
                 </div>
                 <div className="text-right w-50">
-                  <div className="py-1">Cash Out</div>
-                  <div className="text-white text-sm py-1">
+                  <div className="text-secondary py-1">Cash Out</div>
+                  <div className="text-sm py-1 lowercase">
                     {player.cashPoint ? "x " + player.cashPoint : "-"}
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between">
+              <div className="uppercase flex justify-between py-1">
                 <div className="w-[50%] border-r border-[#37374D]">
-                  <div className="py-1">Profit</div>
-                  <div className="text-white text-sm py-1">
+                  <div className="text-secondary py-1">Profit</div>
+                  <div className="text-sm py-1">
                     {player.cashPoint
                       ? (
                           Number(player.betAmount) *
@@ -98,8 +105,8 @@ const UserTable = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="py-1">Bonus</div>
-                  <div className="text-white text-sm py-1">
+                  <div className="text-secondary py-1">Bonus</div>
+                  <div className="text-sm py-1">
                     {player.cashPoint
                       ? (
                           Number(player.betAmount) *

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import environment from "../config";
 import { addHistory, addMyBet, setGameState } from "../store/crash.slice";
 import { setBalance } from "app/store/auth.slice";
-import { newMessage } from "app/store/message.slice";
+import { newMessage, setMessages } from "app/store/message.slice";
 import { constStates } from "app/config/const";
 import { AppDispatch, RootState } from "app/store";
 
@@ -82,10 +82,14 @@ const SocketProvider = () => {
     socket.on("message", (data) => {
       dispatch(newMessage(data));
     });
+    socket.on("messages", (data: Message[]) => {
+      dispatch(setMessages(data));
+    });
     return () => {
       socket.off("auth");
       socket.off("stateInfo");
       socket.off("message");
+      socket.off("messages");
     };
   }, [auth]);
   return <></>;

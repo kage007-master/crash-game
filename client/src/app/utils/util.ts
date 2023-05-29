@@ -24,3 +24,11 @@ export const getTimeAgo = (timestamp: Date) => {
     return `${days} days ago`;
   }
 };
+
+export const getColor = (cashPoint: number) => {
+  if (cashPoint < 1) return "#ff0000";
+  if (cashPoint >= 8) return "#ECBC5E";
+  if (cashPoint >= 4) return "#D14BBC";
+  if (cashPoint >= 2) return "#29C7A1";
+  return "#6D6D8F";
+};

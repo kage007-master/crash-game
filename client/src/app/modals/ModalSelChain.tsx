@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setChain, setSelChain } from "app/store/modal.slice";
 import { coinSVG } from "app/config/const";
 import { RootState } from "app/store";
+import Iconify from "app/components/Iconify";
 
 Modal.setAppElement("body");
 
@@ -25,36 +26,51 @@ const ModalSelChain = () => {
     >
       <p className="text-center text-white text-2xl mb-5">Choose your wallet</p>
       <div
-        className={`bg-border rounded-md z-30 p-2 shadow-md anim-dropdown gap-2 flex-col min-w-[150px]`}
+        className={`bg-border rounded-md z-30 p-5 shadow-md anim-dropdown gap-2 flex-col min-w-[150px]`}
       >
-        <div className="flex items-center gap-2  px-2 py-1">
-          <img
-            alt="avatar"
-            src={auth.user.avatar}
-            className="w-6 h-6 rounded-full border border-secondary"
-          />
-          <div className="text-indigo">{auth.user.name}</div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 px-2 py-1">
+            <img
+              alt="avatar"
+              src={auth.user.avatar}
+              className="w-6 h-6 rounded-full border border-secondary"
+            />
+            <div className="text-indigo">{auth.user.name}</div>
+          </div>
+          <button
+            onClick={() => {
+              dispatch(setSelChain(false));
+            }}
+          >
+            <Iconify
+              icon="uiw:close"
+              className={" w-4 h-4 cursor-pointer"}
+            ></Iconify>
+          </button>
         </div>
-        <div className="border-t border-indigo/10 mx-3"></div>
-        <div className="max-h-[60vh] overflow-y-auto mr-1">
+        <div className="border-t border-indigo/10 mt-3"></div>
+        <div className="max-h-[60vh] overflow-y-auto mt-2">
           {Object.keys(auth.user.balance).map((currency: string) => {
             const CoinIcon = coinSVG[currency];
             return (
-              <div
-                key={currency}
-                className={`flex py-1 px-2 gap-2 text-xs items-center cursor-pointer ${
-                  currency === chain
-                    ? "text-bright bg-indigo/10"
-                    : " hover:bg-indigo/5"
-                }`}
-                onClick={() => {
-                  dispatch(setSelChain(false));
-                  dispatch(setChain(currency));
-                }}
-              >
-                <CoinIcon className="w-6 h-6"></CoinIcon>
-                <div>{auth.user.balance[currency as TCoin]}</div>
-                <div className="uppercase">{currency}</div>
+              <div className="flex items-center justify-between">
+                <div
+                  key={currency}
+                  className="w-[90%] m-overflow flex py-3 px-2 gap-2 text-xs items-center cursor-pointe"
+                  onClick={() => {
+                    dispatch(setSelChain(false));
+                    dispatch(setChain(currency));
+                  }}
+                >
+                  <CoinIcon className="min-w-[24px] min-h-[24px] w-6 h-6"></CoinIcon>
+                  <div>{auth.user.balance[currency as TCoin]}</div>
+                  <div className="uppercase">{currency}</div>
+                </div>
+                {currency === chain ? (
+                  <div className="rounded-full w-1.5 h-1.5 mr-3 bg-green"></div>
+                ) : (
+                  <></>
+                )}
               </div>
             );
           })}

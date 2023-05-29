@@ -49,3 +49,10 @@ interface Player {
   bonus: number;
   chain: TCoin;
 }
+
+interface Message {
+  text: string;
+  address: string;
+  avatar: string;
+  time: Date;
+}

@@ -21,8 +21,8 @@ const Chat = () => {
 
   return chat ? (
     <div className="chat fixed bottom-0 right-0 w-full mt-20 lg:w-[40%] bg-[#252533] z-20 px-5">
-      <p className="text-white text-[22px] py-8 border-b border-[#37374D] flex justify-between items-center">
-        Chat
+      <div className="py-8 border-b border-[#37374D] flex justify-between items-center">
+        <p className="text-white text-lg">Chat</p>
         <button
           onClick={() => {
             dispatch(setChat(false));
@@ -33,7 +33,7 @@ const Chat = () => {
             className={" w-5 h-5 cursor-pointer"}
           ></Iconify>
         </button>
-      </p>
+      </div>
       <div className="chat-content" ref={ref}>
         {messages.map((message: any) => {
           return (
@@ -54,7 +54,9 @@ const Chat = () => {
                   }`}
                 >
                   <p className="text-white mr-2">
-                    {shortenName(message.address)}
+                    {message.address === user.address
+                      ? "You"
+                      : shortenName(message.address)}
                   </p>
                   {getTimeAgo(message.time)}
                 </div>
@@ -82,7 +84,10 @@ const Chat = () => {
             setText(e.target.value)
           }
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.code === "Enter") socketEvents.emitMessage(text);
+            if (e.code === "Enter") {
+              socketEvents.emitMessage(text);
+              setText("");
+            }
           }}
         ></input>
         <button className="w-[48px] h-[48px] text-center justify-center flex items-center rounded-full text-xs md:text-base relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]">
@@ -90,7 +95,10 @@ const Chat = () => {
         </button>
         <button
           className="w-[48px] h-[48px] text-center justify-center flex items-center bg-[url('app/assets/images/button2.png')] bg-[length:100%_100%] text-white rounded-full text-xs md:text-base relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
-          onClick={() => socketEvents.emitMessage(text)}
+          onClick={() => {
+            socketEvents.emitMessage(text);
+            setText("");
+          }}
         >
           <Chat1 className="w-4 h-4" />
         </button>

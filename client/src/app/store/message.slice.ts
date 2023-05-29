@@ -1,12 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface Message {
-  text: string;
-  address: string;
-  avatar: string;
-  time: Date;
-}
-
 interface MessageState {
   history: Message[];
 }
@@ -19,12 +12,15 @@ export const messageSlicer = createSlice({
   name: "message",
   initialState,
   reducers: {
+    setMessages: (state, action: PayloadAction<Message[]>) => {
+      state.history = action.payload;
+    },
     newMessage: (state, action: PayloadAction<Message>) => {
       state.history.push(action.payload);
     },
   },
 });
 
-export const { newMessage } = messageSlicer.actions;
+export const { setMessages, newMessage } = messageSlicer.actions;
 
 export default messageSlicer.reducer;

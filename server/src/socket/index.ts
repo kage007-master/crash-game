@@ -8,10 +8,62 @@ import {
   addWaiting,
   removeWaitiong,
 } from "./crashgame";
+
+interface Message {
+  text: string;
+  address: string;
+  avatar: string;
+  time: Date;
+}
+
+const messages: Message[] = [
+  {
+    text: "Ok. Ill wait",
+    address: "bY3f1..12",
+    avatar: "avatar/avatar2.png",
+    time: new Date(),
+  },
+  {
+    text: "Pellentesque vulputate placerat sem, semper risus sollicitudin vitae. Integereu dignissim eros, et dictum sem.",
+    address: "bY3f1..12",
+    avatar: "avatar/avatar1.png",
+    time: new Date(),
+  },
+  {
+    text: "Nam lobortis iaculis hendrerit.",
+    address: "bY3f1..12",
+    avatar: "avatar/avatar2.png",
+    time: new Date(),
+  },
+  {
+    text: "Pellentesque mi massa, commodo nonvelit ut, venenatis dapibus tellus.",
+    address: "bY3f1..12",
+    avatar: "avatar/avatar3.png",
+    time: new Date(),
+  },
+  {
+    text: "Fusce eget interdum massa, nongravida nisi. Donec eget orci sapienbibendum viverra nec in nisi.",
+    address: "bY3f1..12",
+    avatar: "avatar/avatar4.png",
+    time: new Date(),
+  },
+  {
+    text: "Suspendisse potenti.",
+    address: "bY3f1..12",
+    avatar: "avatar/avatar4.png",
+    time: new Date(),
+  },
+  {
+    text: "Curabitur non efficitur orci, sagittisplacerat lectus.",
+    address: "bY3f1..12",
+    avatar: "avatar/avatar3.png",
+    time: new Date(),
+  },
+];
+
 const socketProvider = (io: any) => {
   startTimer();
   io.on("connection", (socket: any) => {
-    console.log("A user connected");
     var auth = {
       token: "",
       user: {
@@ -38,8 +90,10 @@ const socketProvider = (io: any) => {
     };
     socket.emit("playerState", getPlayers());
     socket.emit("auth");
+    socket.emit("messages", messages);
     socket.on("auth", (data: any) => {
       auth = data.auth;
+      socket.emit("messages", messages);
     });
     socket.on("bet", (data: any) => {
       if (data.address !== auth.user.address || data.address === "") return;
@@ -70,12 +124,14 @@ const socketProvider = (io: any) => {
       Cashout(data.address, data.time, data.point);
     });
     socket.on("message", (data: any) => {
-      io.emit("message", {
+      const newMessage = {
         ...data,
         address: auth.user.address,
         avatar: auth.user.avatar,
         time: new Date(),
-      });
+      };
+      messages.push(newMessage);
+      io.emit("message", newMessage);
     });
   });
 
