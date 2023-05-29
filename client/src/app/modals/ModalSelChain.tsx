@@ -53,9 +53,8 @@ const ModalSelChain = () => {
           {Object.keys(auth.user.balance).map((currency: string) => {
             const CoinIcon = coinSVG[currency];
             return (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between" key={currency}>
                 <div
-                  key={currency}
                   className="w-[90%] m-overflow flex py-3 px-2 gap-2 text-xs items-center cursor-pointe"
                   onClick={() => {
                     dispatch(setSelChain(false));
