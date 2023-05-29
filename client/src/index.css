@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.cdnfonts.com/css/cera-round-pro");
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #1b1b24;
+  font-family: "Cera Round Pro", "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+* {
+  font-family: Montserrat !important;
+}
+
+.chat-other {
+  border-radius: 8px 32px 32px 32px;
+}
+
+.chat-mine {
+  border: 1px solid #37374d;
+  border-radius: 32px 8px 32px 32px;
+}
+
+.chat-message {
+  width: calc(40% - 40px);
+  border: 1px solid #37374d;
+  border-radius: 16px 48px 48px 16px;
+}
+
+.chat-content {
+  max-height: calc(100% - 163px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.chat-input {
+  background: none;
+  margin-left: 12px;
+  width: calc(100% - 96px);
+  outline: none;
+}
+
+.chat {
+  height: calc(100vh - 112px);
+  border-radius: 32px 0px 0px 0px;
+}
+
+.menu-item {
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 12px 20px;
+  width: auto;
+  margin-bottom: 12px;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.menu-item.active {
+  border: 1px solid #303042;
+}
+
+.user-icon {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  margin: -32px 0 0 -32px;
+  width: 64px;
+  height: 64px;
+  padding: 5px;
+  background-color: #1b1b24;
+}
+
+.navbar {
+  width: calc(100% - 144px);
+}
+
+@media only screen and (max-width: 1023px) {
+  .chat-message {
+    width: calc(100% - 40px);
+  }
+  .chat {
+    height: 100vh;
+    border-radius: 0;
+  }
+  .navbar {
+    width: calc(100% - 32px);
+  }
+  .sidebar {
+    background: rgba(27, 27, 36, 0.72);
+    backdrop-filter: blur(28px);
+  }
+}
+
+.usertable {
+  width: 100%;
+  display: grid;
+  grid-gap: 2px;
+  grid-template-columns: 16% 24% 22% 18% 18%;
+}
+
+.bettable {
+  width: 100%;
+  display: grid;
+  grid-gap: 2px;
+  grid-template-columns: 26% 24% 14% 17% 17%;
+}
