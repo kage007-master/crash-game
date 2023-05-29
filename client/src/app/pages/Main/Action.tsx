@@ -157,7 +157,7 @@ const Action = (props: any) => {
           ></Iconify>
         </div>
         <button
-          className="py-3 mp:py-4 min-w-[200px] px-6 text-center justify-center flex items-center bg-[url('app/assets/images/button.png')] bg-[length:100%_100%] text-white rounded-full text-base relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
+          className="py-3 mp:py-4 min-w-[200px] px-6 text-center justify-center flex items-center bg-[url('app/assets/images/button.png')] bg-[length:100%_100%] text-white rounded-full text-xs relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
           onClick={() => {
             !auth.token
               ? notify.error("Please login!")
@@ -183,18 +183,18 @@ const Action = (props: any) => {
           }}
         >
           {!auth.token
-            ? "DISABLE"
+            ? "Place Bet!"
             : gameState.state === constStates.loading && !me
-            ? "B E T"
+            ? "Bet"
             : gameState.state === constStates.loading && me
-            ? "LOADING"
+            ? "Loading"
             : gameState.state === constStates.playing &&
               me &&
               me.cashPoint === 0
-            ? "CASH OUT"
+            ? "Cash Out"
             : promise
-            ? "LOADING (CANCEL)"
-            : "BET (NEXT ROUND)"}
+            ? "Loading (Cancel)"
+            : "Bet (Next Round)"}
         </button>
         <div
           className="hidden sm:flex items-center m-rounded cursor-pointer p-3 md:p-4 hover:bg-card anim"

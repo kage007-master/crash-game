@@ -67,7 +67,7 @@ export default function Dropdown(props: any) {
             {Object.keys(auth.user.balance).map((currency: string) => {
               const CoinIcon = coinSVG[currency];
               return currency === chain ? (
-                <></>
+                <div key={currency}></div>
               ) : (
                 <div
                   key={currency}
