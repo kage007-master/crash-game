@@ -1,4 +1,6 @@
 import http from "http";
+import https from "https";
+import fs from "fs";
 import express from "express";
 import path from "path";
 import cors from "cors";
@@ -19,6 +21,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+const options = {
+  key: fs.readFileSync("ssl/key.pem"),
+  cert: fs.readFileSync("ssl/certificate.pem"),
+};
+
+//const httpServer = https.createServer(options, app);
 const httpServer = new http.Server(app);
 const io = new SocketIO.Server(httpServer, {
   cors: {

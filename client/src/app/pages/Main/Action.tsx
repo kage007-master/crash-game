@@ -157,7 +157,7 @@ const Action = (props: any) => {
           ></Iconify>
         </div>
         <button
-          className="py-3 mp:py-4 min-w-[200px] px-6 text-center justify-center flex items-center bg-[url('app/assets/images/button.png')] bg-[length:100%_100%] text-white rounded-full text-xs relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
+          className="py-3 md:py-4 min-w-[200px] px-6 text-center justify-center flex items-center bg-[url('app/assets/images/button.png')] bg-[length:100%_100%] text-white rounded-full text-xs relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
           onClick={() => {
             !auth.token
               ? notify.error("Please login!")
