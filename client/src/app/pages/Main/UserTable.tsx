@@ -25,7 +25,7 @@ const UserTable = () => {
               className={`py-2 usertable ${
                 player.cashPoint > 0
                   ? "text-[#34c2e6]"
-                  : gameState.state === constStates.crash
+                  : !gameState.isRising
                   ? "text-red-500"
                   : "text-[#4d555f]"
               }`}
@@ -71,7 +71,7 @@ const UserTable = () => {
               className={`relative ${
                 player.cashPoint > 0
                   ? "text-[#34c2e6]"
-                  : gameState.state === constStates.crash
+                  : !gameState.isRising
                   ? "text-red-500"
                   : "text-[#4d555f]"
               }`}

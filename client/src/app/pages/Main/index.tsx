@@ -24,7 +24,7 @@ const Main = () => {
         <div className="w-full relative lg:ml-24 px-4 lg:px-6">
           <Navbar></Navbar>
           <Chat></Chat>
-          <div className="w-full relative mt-24 md:mt-28">
+          <div className="w-full relative mt-28 md:mt-28">
             <div className="lg:flex lg:gap-8">
               <div className="lg:w-[60%]">
                 <Rocket refer={rocketRef}></Rocket>

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const shortenName = (name: string) => {
   if (!name || !name.length) return "";
   return name.length < 10
@@ -6,23 +8,7 @@ export const shortenName = (name: string) => {
 };
 
 export const getTimeAgo = (timestamp: Date) => {
-  const currentTimestamp = Math.floor(Date.now() / 1000); // Convert to seconds
-
-  const elapsedSeconds =
-    currentTimestamp - Math.floor(new Date(timestamp).getTime() / 1000);
-
-  if (elapsedSeconds < 60) {
-    return `${elapsedSeconds} seconds ago`;
-  } else if (elapsedSeconds < 3600) {
-    const minutes = Math.floor(elapsedSeconds / 60);
-    return `${minutes} minutes ago`;
-  } else if (elapsedSeconds < 86400) {
-    const hours = Math.floor(elapsedSeconds / 3600);
-    return `${hours} hours ago`;
-  } else {
-    const days = Math.floor(elapsedSeconds / 86400);
-    return `${days} days ago`;
-  }
+  return moment(timestamp).format("h:mm a");
 };
 
 export const getColor = (cashPoint: number) => {
@@ -31,4 +17,12 @@ export const getColor = (cashPoint: number) => {
   if (cashPoint >= 4) return "#D14BBC";
   if (cashPoint >= 2) return "#29C7A1";
   return "#6D6D8F";
+};
+
+export const f = (x: number) => {
+  x -= 5;
+  if (x < 0) {
+    return Math.pow(1 - (x * x) / 5 / 5, 0.4);
+  }
+  return Math.pow(x / 10, 2.5) + 1;
 };

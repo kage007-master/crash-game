@@ -9,6 +9,7 @@ import { setScreenshot, setSetting } from "app/store/modal.slice";
 import { ToastrContext } from "app/providers/ToastrProvider";
 import { setBalance } from "app/store/auth.slice";
 import { RootState } from "app/store";
+import { f } from "../../utils/util";
 
 const Action = (props: any) => {
   const dispatch = useDispatch();
@@ -59,13 +60,12 @@ const Action = (props: any) => {
       dispatch(
         setBalance({
           chain: me.chain,
-          amount: Number((me.betAmount * gameState.point).toFixed(8)),
+          amount: Number((me.betAmount * f(gameState.timeElapsed)).toFixed(8)),
         })
       );
     socketEvents.emitCashOut({
       address: auth.user.address,
-      time: gameState.time,
-      point: gameState.point,
+      time: gameState.timeElapsed,
     });
   };
 
@@ -157,19 +157,20 @@ const Action = (props: any) => {
           ></Iconify>
         </div>
         <button
-          className="py-3 md:py-4 min-w-[200px] px-6 text-center justify-center flex items-center bg-[url('app/assets/images/button.png')] bg-[length:100%_100%] text-white rounded-full text-xs relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
+          className="py-3 md:py-4 min-w-[200px] px-6 text-center justify-center flex items-center bg-[url('app/assets/images/button.png')] bg-[length:100%_100%] text-white rounded-full text-base relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
           onClick={() => {
             !auth.token
               ? notify.error("Please login!")
-              : gameState.state === constStates.loading && !me
+              : gameState.isRising && gameState.timeElapsed <= 5 && !me
               ? socketEvents.emitBet({
                   address: auth.user.address,
                   amount: Number(betAmount),
                   chain,
                 })
-              : gameState.state === constStates.loading && me
+              : gameState.isRising && gameState.timeElapsed <= 5 && me
               ? console.log("loading")
-              : gameState.state === constStates.playing &&
+              : gameState.isRising &&
+                gameState.timeElapsed >= 5 &&
                 me &&
                 me.cashPoint === 0
               ? onCashOut()
@@ -184,11 +185,12 @@ const Action = (props: any) => {
         >
           {!auth.token
             ? "Place Bet!"
-            : gameState.state === constStates.loading && !me
+            : gameState.isRising && gameState.timeElapsed <= 5 && !me
             ? "Bet"
-            : gameState.state === constStates.loading && me
+            : gameState.isRising && gameState.timeElapsed <= 5 && me
             ? "Loading"
-            : gameState.state === constStates.playing &&
+            : gameState.isRising &&
+              gameState.timeElapsed > 5 &&
               me &&
               me.cashPoint === 0
             ? "Cash Out"

@@ -13,7 +13,7 @@ const ModalScreenshot = () => {
   return (
     <Modal
       id="Screenshot"
-      isOpen={screenshot}
+      isOpen={!!screenshot}
       onRequestClose={() => {
         dispatch(setScreenshot(null));
       }}

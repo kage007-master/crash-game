@@ -28,9 +28,9 @@ const HistoryTable = () => {
                 <td className="m-overflow py-2">{game._id}</td>
                 <td
                   className="py-2 lowercase"
-                  style={{ color: getColor(game.cashPoint) }}
+                  style={{ color: getColor(game.crashPoint) }}
                 >
-                  x {game.cashPoint.toFixed(2)}
+                  x {game.crashPoint.toFixed(2)}
                 </td>
               </tr>
             );

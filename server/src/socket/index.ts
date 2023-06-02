@@ -1,12 +1,12 @@
 import {
   getTimeState,
-  startTimer,
   addPlayer,
   getPlayers,
   getWaitings,
   Cashout,
   addWaiting,
   removeWaitiong,
+  startNewRound,
 } from "./crashgame";
 
 interface Message {
@@ -62,7 +62,7 @@ const messages: Message[] = [
 ];
 
 const socketProvider = (io: any) => {
-  startTimer();
+  startNewRound(io);
   io.on("connection", (socket: any) => {
     var auth = {
       token: "",
@@ -100,7 +100,6 @@ const socketProvider = (io: any) => {
       addPlayer({
         ...auth.user,
         cashPoint: 0,
-        cashTime: 0,
         betAmount: data.amount,
         chain: data.chain,
       });
@@ -110,7 +109,6 @@ const socketProvider = (io: any) => {
       addWaiting({
         ...auth.user,
         cashPoint: 0,
-        cashTime: 0,
         betAmount: data.amount,
         chain: data.chain,
       });
@@ -121,7 +119,7 @@ const socketProvider = (io: any) => {
     });
     socket.on("cashOut", (data: any) => {
       if (data.address !== auth.user.address || data.address === "") return;
-      Cashout(data.address, data.time, data.point);
+      Cashout(data.address, data.time);
     });
     socket.on("message", (data: any) => {
       const newMessage = {
@@ -134,13 +132,5 @@ const socketProvider = (io: any) => {
       io.emit("message", newMessage);
     });
   });
-
-  setInterval(() => {
-    io.emit("stateInfo", {
-      gameState: getTimeState(),
-      playerState: getPlayers(),
-      waitingState: getWaitings(),
-    });
-  }, 100);
 };
 export default socketProvider;

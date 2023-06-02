@@ -4,11 +4,10 @@ import axios from "app/components/axios";
 
 const initialState: CrashState = {
   gameState: {
-    time: 0,
-    state: constStates.loading,
-    point: 0,
+    timeElapsed: 0,
+    isRising: false,
     GameID: "",
-    crash: 0,
+    crashTimeElapsed: 0,
   },
   playerState: [],
   waitingState: [],

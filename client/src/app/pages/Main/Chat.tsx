@@ -38,6 +38,7 @@ const Chat = () => {
         {messages.map((message: any) => {
           return (
             <div
+              key={message.address + message.time}
               className={`my-4 flex gap-4 ${
                 message.address === user.address ? " flex-row-reverse" : ""
               }`}

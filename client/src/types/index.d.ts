@@ -16,7 +16,7 @@ type TCoin =
 
 interface Game {
   _id: string;
-  cashPoint: number;
+  crashPoint: number;
 }
 
 interface Bet {
@@ -30,11 +30,10 @@ interface Bet {
 
 interface CrashState {
   gameState: {
-    time: number;
-    state: string;
-    point: number;
+    timeElapsed: number;
+    isRising: boolean;
     GameID: string;
-    crash: number;
+    crashTimeElapsed: number;
   };
   playerState: Player[];
   waitingState: [];

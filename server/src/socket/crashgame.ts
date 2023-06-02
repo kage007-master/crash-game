@@ -1,57 +1,27 @@
-import { convertTime, convertPoint } from "../utils/timeConverter";
+import { f } from "../utils/timeConverter";
 import GameHistoryModel from "../models/GameHistory";
 import BetHistoryModel from "../models/BetHistory";
 import UserModel, { User } from "../models/User";
-
-const states = {
-  crash: "CRASH",
-  loading: "LOADING",
-  playing: "PLAYING",
-};
-
-const loadingTime = 6;
-const crashTime = 4;
 
 interface Player {
   address: string;
   name: string;
   avatar: string;
   cashPoint: number;
-  cashTime: number;
   betAmount: number;
   chain: string;
   bonus?: number;
 }
 
-var time = 0;
-var state = states.loading;
+var timeElapsed = 0;
+var isRising = false;
+var crashTimeElapsed = 0;
 var GameID = "";
-var crash = 0;
 var players: Player[] = [];
 var waitings: Player[] = [];
-var crashPoint = 14;
 
-export const startTimer = () => {
-  console.log("timer start");
-  var timer = setInterval(() => {
-    time += 0.1;
-    if (state === states.loading && time > loadingTime)
-      startGame(), (crashPoint = Math.ceil(Math.random() * 30) + 4);
-    else if (state === states.playing && time > crashPoint) finishGame();
-    else if (state === states.crash && time > crashTime) initGame();
-  }, 100);
-};
-
-const initGame = () => {
+export const startNewRound = (io: any) => {
   players = waitings;
-  waitings = [];
-  state = states.loading;
-  time = 0;
-};
-
-const startGame = () => {
-  state = states.playing;
-  time = 0;
   players.map(async (player: Player) => {
     let user: any = await UserModel.findOne({ address: player.address });
     if (user && user.balance) {
@@ -62,39 +32,56 @@ const startGame = () => {
       user.save();
     }
   });
+  waitings = [];
+  isRising = true;
+  timeElapsed = 0;
+  let timerId = setInterval(() => {
+    if (isRising && timeElapsed > 5 && Math.random() < 0.01) {
+      isRising = false;
+      crashTimeElapsed = 0;
+      var newGame = new GameHistoryModel({
+        crashPoint: f(timeElapsed),
+        hash: "123",
+        time: new Date(),
+      });
+      newGame.save();
+      GameID = String(newGame._id);
+      players.map((player) => {
+        var history = new BetHistoryModel({
+          gameID: newGame._id,
+          address: player.address,
+          betAmount: player.betAmount,
+          chain: player.chain,
+          cashPoint: player.cashPoint,
+          bonus: player.bonus,
+          time: new Date(),
+        });
+        history.save();
+      });
+    } else if (isRising) {
+      timeElapsed += 0.05;
+    } else {
+      crashTimeElapsed += 2;
+      // start a new round
+      if (crashTimeElapsed >= 120) {
+        clearInterval(timerId);
+        startNewRound(io);
+      }
+    }
+    io.emit("stateInfo", {
+      gameState: getTimeState(),
+      playerState: getPlayers(),
+      waitingState: getWaitings(),
+    });
+  }, 50);
 };
 
-const finishGame = () => {
-  var newGame = new GameHistoryModel({
-    cashPoint: convertPoint(crashPoint),
-    hash: "123",
-    time: new Date(),
-  });
-  newGame.save();
-  GameID = String(newGame._id);
-  crash = convertPoint(crashPoint);
-  players.map((player) => {
-    var history = new BetHistoryModel({
-      gameID: newGame._id,
-      address: player.address,
-      betAmount: player.betAmount,
-      chain: player.chain,
-      cashPoint: player.cashPoint,
-      bonus: player.bonus,
-      time: new Date(),
-    });
-    history.save();
-  });
-  state = states.crash;
-  time = 0;
-};
 export const getTimeState = () => {
   return {
-    time: convertTime(time),
-    state,
-    point: convertPoint(time),
+    timeElapsed,
+    isRising,
     GameID,
-    crash,
+    crashTimeElapsed,
   };
 };
 export const getPlayers = () => {
@@ -103,7 +90,7 @@ export const getPlayers = () => {
 export const getWaitings = () => {
   return waitings;
 };
-export const addPlayer = (player: Player) => {
+export const addPlayer = async (player: Player) => {
   if (
     players.find((item) => {
       return item.address === player.address;
@@ -111,18 +98,23 @@ export const addPlayer = (player: Player) => {
   )
     return false;
   players.push({ ...player, bonus: 0 });
+  let user: any = await UserModel.findOne({ address: player.address });
+  if (user && user.balance) {
+    user.balance[player.chain] -= player.betAmount;
+    user.balance[player.chain] = Number(user.balance[player.chain].toFixed(8));
+    user.save();
+  }
   return true;
 };
 
-export const Cashout = async (address: string, time: number, point: number) => {
+export const Cashout = async (address: string, time: number) => {
   let me = players.find((item) => {
     return item.address === address;
   });
   if (!me) return false;
   if (me.cashPoint > 0) return false;
-  if (point > crashPoint) return false;
-  me.cashPoint = point;
-  me.cashTime = time;
+  if (time > timeElapsed) return false;
+  me.cashPoint = f(time);
   let user: any = await UserModel.findOne({ address: address });
   if (user && user.balance) {
     user.balance[me.chain] += Number((me.betAmount * me.cashPoint).toFixed(8));

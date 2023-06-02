@@ -5,8 +5,8 @@ import environment from "../config";
 import { addHistory, addMyBet, setGameState } from "../store/crash.slice";
 import { setBalance } from "app/store/auth.slice";
 import { newMessage, setMessages } from "app/store/message.slice";
-import { constStates } from "app/config/const";
 import { AppDispatch, RootState } from "app/store";
+import { f } from "app/utils/util";
 
 const socket: Socket = io(environment.socket);
 
@@ -42,8 +42,9 @@ const SocketProvider = () => {
     socket.on("stateInfo", (data: CrashState) => {
       dispatch(setGameState(data));
       if (
-        data.gameState.state === constStates.playing &&
-        data.gameState.time < 0.1
+        data.gameState.isRising &&
+        data.gameState.timeElapsed <= 5.05 &&
+        data.gameState.timeElapsed >= 5
       ) {
         let me = data.playerState.find((player: Player) => {
           return player.address === auth.user.address;
@@ -53,14 +54,11 @@ const SocketProvider = () => {
             setBalance({ chain: me.chain, amount: Number(-me.betAmount) })
           );
       }
-      if (
-        data.gameState.state === constStates.crash &&
-        data.gameState.time < 0.1
-      ) {
+      if (!data.gameState.isRising && data.gameState.crashTimeElapsed === 0) {
         dispatch(
           addHistory({
             _id: data.gameState.GameID,
-            cashPoint: data.gameState.crash,
+            crashPoint: f(data.gameState.timeElapsed),
           })
         );
         let me = data.playerState.find((player: Player) => {
