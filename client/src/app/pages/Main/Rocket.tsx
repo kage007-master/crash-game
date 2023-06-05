@@ -260,7 +260,7 @@ const drawStatusText = () => {
     ctx.globalAlpha = 1 - (timeElapsed - Math.floor(timeElapsed));
     fontSize *= 1 + ctx.globalAlpha;
   }
-  if (!isRising) content = `${f(timeElapsed).toFixed(2)}x`;
+  // if (!isRising) content = `${f(timeElapsed).toFixed(2)}x`;
   drawText(
     content,
     width > 384 ? width / 2 : ORG_X + 40,
@@ -269,6 +269,16 @@ const drawStatusText = () => {
     `${fontSize}px`,
     width > 384 ? "center" : "left"
   );
+  if (!isRising) {
+    drawText(
+      "Round Over",
+      width > 384 ? width / 2 : ORG_X + 40,
+      height / 3 - fontSize,
+      isRising ? "#F5F5FA" : "#FF3300",
+      `${fontSize / 3}px`,
+      width > 384 ? "center" : "left"
+    );
+  }
   ctx.restore();
 };
 
