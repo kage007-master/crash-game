@@ -1,26 +1,25 @@
-import React, { useRef, useEffect, useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { constStates } from "app/config/const";
 import { RootState } from "app/store";
 import { f } from "../../utils/util";
+// import { fabric } from "fabric";
 
-const rocketImageCount = 180;
-const crashImageCount = 119;
+const rocketImageCount = 1;
+const crashImageCount = 60;
 const rocketImages: HTMLImageElement[] = [];
 const crashImages: HTMLImageElement[] = [];
 
 const PRIMARY_COLOR = "#6D6D8F";
 const BACKGROUND_COLOR = "#2A2A38";
 
-const width: number = 1440;
-const height: number = 800;
-const PREPARE_TIME = 5;
-const GAP = 60;
-const ORG_X = GAP;
-const ORG_Y = height - GAP;
-const STAGE_WIDTH = width - GAP * 2;
-const STAGE_HEIGHT = height - GAP * 2;
-let unit: number = 1;
+let width = 1440;
+let height = 800;
+let GAP = 60;
+let ORG_X = GAP;
+let ORG_Y = height - GAP;
+let STAGE_WIDTH = width - GAP * 2;
+let STAGE_HEIGHT = height - GAP * 2;
+let rate = 1;
 
 let timeElapsed: number, crashTimeElapsed: number, isRising: boolean, ctx: any;
 
@@ -44,12 +43,10 @@ const loadImage1 = async (i: number): Promise<HTMLImageElement> => {
 };
 
 const importImages = async () => {
-  for (let i = 1; i <= rocketImageCount; i++) {
+  for (let i = 1; i <= rocketImageCount; i++)
     rocketImages.push(await loadImage(i));
-  }
-  for (let i = 0; i <= crashImageCount; i++) {
-    crashImages.push(await loadImage1(i));
-  }
+  for (let i = 0; i < crashImageCount; i++)
+    crashImages.push(await loadImage1(i * 2));
 };
 importImages();
 
@@ -101,17 +98,17 @@ const drawAxis = (W: number, H: number) => {
       xPos,
       yPos,
       PRIMARY_COLOR,
-      "24px",
+      `${12}px`,
       x ? "center" : "left"
     );
 
-    if (x) ctx.lineTo(xPos - rt.width / 2 - 15, yPos - rt.height / 2);
+    if (x) ctx.lineTo(xPos - rt.width / 2 - 15 * rate, yPos - rt.height / 2);
     ctx.strokeStyle = "#37374D";
     ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(xPos + rt.width / 2 + 15, yPos - rt.height / 2);
+    ctx.moveTo(xPos + rt.width / 2 + 15 * rate, yPos - rt.height / 2);
   }
 
   if (Math.floor(W / xInterval) * xInterval + xInterval / 10 < W) {
@@ -120,16 +117,16 @@ const drawAxis = (W: number, H: number) => {
 
   for (let y = 0; y <= H; y += yInterval) {
     let xPos = ORG_X;
-    let yPos = ORG_Y - (STAGE_HEIGHT / H) * y;
-    if (y) drawText(y + "x", xPos, yPos, PRIMARY_COLOR, "24px", "left");
+    let yPos = ORG_Y - (STAGE_HEIGHT / H) * y - 8;
+    if (y) drawText(y + "x", xPos - 1, yPos, PRIMARY_COLOR, `${12}px`, "left");
 
-    if (y) ctx.lineTo(xPos, yPos + 15);
+    if (y) ctx.lineTo(xPos, yPos + 15 * rate);
     ctx.strokeStyle = "#37374D";
     ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(xPos, yPos - 28);
+    ctx.moveTo(xPos, yPos - 30 * rate);
   }
   if (Math.floor(H / yInterval) * yInterval + yInterval / 10 < H) {
     ctx.lineTo(ORG_X, ORG_Y - STAGE_HEIGHT);
@@ -139,22 +136,22 @@ const drawAxis = (W: number, H: number) => {
 };
 
 const drawRocket = (W: number, H: number) => {
-  const D = 30;
+  const D = 30 * rate;
   const curX = ORG_X + (STAGE_WIDTH / W) * timeElapsed + D;
   const curY = ORG_Y - (f(timeElapsed) / H) * STAGE_HEIGHT - D;
-  const imgWidth = 150;
-  const imgHeight = 150;
+  const imgWidth = 150 * rate;
+  const imgHeight = 150 * rate;
   const delta = 0.1;
   let ang = Math.atan2(
-    (f(timeElapsed - delta) - f(timeElapsed)) / H,
+    ((f(timeElapsed - delta) - f(timeElapsed)) / H) * (width > 384 ? 1 : 2),
     delta / W / (timeElapsed / 5 ? 0.5 : 1)
   );
   ctx.save();
   ctx.translate(curX, curY);
   ctx.rotate(ang);
-  if (rocketImages.length === 180)
+  if (rocketImages.length === rocketImageCount)
     ctx.drawImage(
-      rocketImages[parseInt((timeElapsed * 50).toString()) % 180],
+      rocketImages[parseInt((timeElapsed * 50).toString()) % rocketImageCount],
       -imgWidth / 4,
       -imgHeight / 2,
       imgWidth,
@@ -164,7 +161,7 @@ const drawRocket = (W: number, H: number) => {
 };
 
 const drawGraph = (W: number, H: number) => {
-  const D = 30;
+  const D = 30 * rate;
   const SEG = Math.min(timeElapsed * 100, 1000);
 
   const pureGraph = () => {
@@ -207,12 +204,6 @@ const drawGraph = (W: number, H: number) => {
   ctx.restore();
 
   ctx.save();
-  ctx.fillStyle = "#292938";
-  ctx.filter = "blur(40px)";
-  ctx.fillRect(0, ORG_Y - D - 100, width, 200);
-  ctx.restore();
-
-  ctx.save();
   pureGraph();
   let radGrad = ctx.createRadialGradient(
     ORG_X,
@@ -225,36 +216,26 @@ const drawGraph = (W: number, H: number) => {
   radGrad.addColorStop(0, "#61B0D0");
   radGrad.addColorStop(0.5, "#4A70FF");
   radGrad.addColorStop(1, "#AD19C6");
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 6;
   ctx.strokeStyle = radGrad;
   ctx.shadowColor = "#111111";
   ctx.shadowOffsetY = 1;
   ctx.shadowBlur = 3;
   ctx.stroke();
   ctx.restore();
-
-  ctx.save();
-  let lineInnerGrad = ctx.createLinearGradient(0, 0, STAGE_WIDTH, STAGE_HEIGHT);
-  lineInnerGrad.addColorStop(0, "#9CD5FF");
-  lineInnerGrad.addColorStop(1, "#FFC1DF");
-  ctx.lineWidth = 6;
-  ctx.strokeStyle = lineInnerGrad;
-  ctx.filter = "blur(2px)";
-  ctx.stroke();
-  ctx.restore();
 };
 
 const drawCrash = (W: number, H: number) => {
-  const D = 30;
+  const D = 30 * rate;
   const curX = ORG_X + (STAGE_WIDTH / W) * timeElapsed + D;
   const curY = ORG_Y - (f(timeElapsed) / H) * STAGE_HEIGHT - D;
-  const imgWidth = 300;
-  const imgHeight = 300;
+  const imgWidth = 300 * rate;
+  const imgHeight = 300 * rate;
   ctx.save();
   ctx.translate(curX, curY);
-  if (crashImages.length == 120)
+  if (crashImages.length == crashImageCount)
     ctx.drawImage(
-      crashImages[crashTimeElapsed],
+      crashImages[Math.floor(crashTimeElapsed / 2)],
       -imgWidth / 2,
       -imgHeight / 2,
       imgWidth,
@@ -266,38 +247,33 @@ const drawCrash = (W: number, H: number) => {
 const drawBackground = () => {
   ctx.save();
   ctx.fillStyle = BACKGROUND_COLOR;
-  ctx.fillRect(0, 0, width, width);
-  ctx.fillStyle = "#9595B9";
-  ctx.filter = "blur(100px)";
-  ctx.beginPath();
-  ctx.arc(width, 50, 150, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillRect(0, 0, width, height);
   ctx.restore();
 };
 
 const drawStatusText = () => {
   ctx.save();
   let content = f(timeElapsed).toFixed(2) + "x";
-  let fontSize = 96;
+  let fontSize = width > 720 ? 72 : 48;
   if (timeElapsed < 5) {
     content = (5 - Math.floor(timeElapsed)).toString();
     ctx.globalAlpha = 1 - (timeElapsed - Math.floor(timeElapsed));
     fontSize *= 1 + ctx.globalAlpha;
   }
-  if (!isRising) content = `Bang @${f(timeElapsed).toFixed(2)}x`;
+  if (!isRising) content = `${f(timeElapsed).toFixed(2)}x`;
   drawText(
     content,
-    width / 2,
+    width > 384 ? width / 2 : ORG_X + 40,
     height / 3,
     isRising ? "#F5F5FA" : "#FF3300",
     `${fontSize}px`,
-    "center"
+    width > 384 ? "center" : "left"
   );
   ctx.restore();
 };
 
 const draw = () => {
-  ctx.clearRect(0, 0, 1440, 800);
+  ctx.clearRect(0, 0, width, height);
   let W = Math.max(10, timeElapsed * 1.1);
   let H = Math.max(2, f(timeElapsed) * 1.3);
 
@@ -354,32 +330,33 @@ const Rocket = (props: any) => {
   useEffect(() => {
     const canvas: any = canvasRef.current;
     ctx = canvas.getContext("2d");
-    unit = Math.floor(canvas.parentElement.offsetWidth / 16);
+    width = canvas.parentElement.offsetWidth;
+    height = ((width * 400) / 720) * (width > 384 ? 1 : 2);
+    rate = (width / 1440) * (width > 384 ? 1 : 2);
+    GAP = (60 * width) / 1440;
+    ORG_X = GAP;
+    ORG_Y = height - GAP * 0.8;
+    STAGE_WIDTH = width - GAP * (width > 384 ? 2 : 4);
+    STAGE_HEIGHT = height - GAP * (width > 384 ? 2.5 : 3.2);
     isRising = gameState.isRising;
     timeElapsed = gameState.timeElapsed;
     crashTimeElapsed = gameState.crashTimeElapsed;
-    ctx.save();
-    ctx.transform(
-      (unit * 16) / width,
-      0,
-      0,
-      (unit * (unit > 24 ? 8 : 18)) / height,
-      0,
-      0
-    );
     draw();
-    ctx.restore();
-    // drawPlayers(ctx, unit, players, 1.7, 6.3, 12.8, 4.8);
     return () => {};
   }, [gameState]);
 
   return (
-    <div className="" ref={props.refer}>
+    <div className="relative bg-[BACKGROUND_COLOR]" ref={props.refer}>
+      <div className="blur"></div>
+      <div
+        className="blur2"
+        // style={{ width: `0}%` }}
+      ></div>
       <canvas
         className="mx-auto rounded-3xl"
         ref={canvasRef}
-        width={unit * 16}
-        height={unit * (unit > 24 ? 8 : 18)}
+        width={width}
+        height={height}
       />
     </div>
   );

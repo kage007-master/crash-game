@@ -36,7 +36,7 @@ export const startNewRound = (io: any) => {
   isRising = true;
   timeElapsed = 0;
   let timerId = setInterval(() => {
-    if (isRising && timeElapsed > 5 && Math.random() < 0.01) {
+    if (isRising && timeElapsed > 10 && Math.random() < 0.005) {
       isRising = false;
       crashTimeElapsed = 0;
       var newGame = new GameHistoryModel({

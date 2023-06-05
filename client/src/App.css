@@ -116,3 +116,25 @@
     width: 100%;
   }
 } */
+
+.blur {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  right: 0px;
+  top: 0px;
+
+  background: #9595b9;
+  opacity: 0.72;
+  filter: blur(60px) !important;
+}
+
+.blur2 {
+  position: absolute;
+  width: 90%;
+  height: 25%;
+  right: 5%;
+  bottom: 4%;
+  background: #292938;
+  filter: blur(25px);
+}

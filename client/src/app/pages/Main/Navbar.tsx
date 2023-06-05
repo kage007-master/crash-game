@@ -64,7 +64,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="fixed navbar flex items-center py-6 z-10 bg-[#1B1B24]">
+      <div className="fixed navbar flex items-center py-6 z-10 bg-[#1B1B24] pr-4">
         <div
           className="m-rounded p-3 md:p-4 cursor-pointer anim hover:bg-card mr-6 lg:hidden"
           onClick={() => {
