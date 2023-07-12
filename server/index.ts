@@ -29,9 +29,7 @@ const options = {
 //const httpServer = https.createServer(options, app);
 const httpServer = new http.Server(app);
 const io = new SocketIO.Server(httpServer, {
-  cors: {
-    methods: ["GET", "POST"],
-  },
+  cors: { methods: ["GET", "POST"] },
 }).of("/crash");
 socketProvider(io);
 app.use("/", router);

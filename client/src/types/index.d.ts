@@ -55,3 +55,17 @@ interface Message {
   avatar: string;
   time: Date;
 }
+
+type TNewtwork =
+  | "bitcoin"
+  | "ether"
+  | "bsc"
+  | "polygon"
+  | "tron"
+  | "solana"
+  | "kaspa"
+  | "ergo"
+  | "ripple"
+  | "litecoin"
+  | "mvx"
+  | "cardano";

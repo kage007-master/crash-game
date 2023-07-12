@@ -9,6 +9,7 @@ interface IState {
     name: string;
     avatar: string;
     balance: Record<TCoin, number>;
+    wallet: any;
   };
 }
 
@@ -34,6 +35,7 @@ const initialState: IState = {
       sol: 0,
       ebone: 0,
     },
+    wallet: null,
   },
 };
 

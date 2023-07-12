@@ -10,6 +10,48 @@ export interface User {
 const ModelSchema = new Schema({
   address: { type: String, required: true, unique: true },
   name: { type: String, required: true },
+  wallet: {
+    mvx: {
+      address: { type: String },
+      seed: { type: String },
+    },
+    solana: {
+      address: { type: String },
+      privateKey: { type: String },
+    },
+    ether: {
+      address: { type: String },
+      privateKey: { type: String },
+    },
+    bsc: {
+      address: { type: String },
+      privateKey: { type: String },
+    },
+    polygon: {
+      address: { type: String },
+      privateKey: { type: String },
+    },
+    cardano: {
+      address: { type: String },
+      seed: { type: String },
+    },
+    tron: {
+      address: { type: String },
+      privateKey: { type: String },
+    },
+    litecoin: {
+      address: { type: String },
+      privateKey: { type: String },
+    },
+    bitcoin: {
+      address: { type: String },
+      privateKey: { type: String },
+    },
+    ripple: {
+      address: { type: String },
+      secretKey: { type: String },
+    },
+  },
   balance: {
     btc: { type: Number, default: 0.0 },
     eth: { type: Number, default: 0.0 },

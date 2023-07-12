@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { setChain, setSelChain } from "app/store/modal.slice";
-import { coinSVG } from "app/config/const";
+import { coinSVG, coins } from "app/config/const";
 import { RootState } from "app/store";
 import Iconify from "app/components/Iconify";
 
@@ -50,7 +50,7 @@ const ModalSelChain = () => {
         </div>
         <div className="border-t border-indigo/10 mt-3"></div>
         <div className="max-h-[60vh] overflow-y-auto mt-2">
-          {Object.keys(auth.user.balance).map((currency: string) => {
+          {coins.map((currency: string) => {
             const CoinIcon = coinSVG[currency];
             return (
               <div className="flex items-center justify-between" key={currency}>

@@ -121,9 +121,7 @@ const ModalSignUp = () => {
             >
               <Iconify
                 icon="tabler:wallet-off"
-                className={
-                  "text-lg w-5 h-5 flex-none cursor-pointer anim text-tomato"
-                }
+                className="text-lg w-5 h-5 flex-none cursor-pointer anim text-tomato"
               ></Iconify>
             </div>
           </div>

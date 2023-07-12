@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "app/store";
 import { f } from "../../utils/util";
-// import { fabric } from "fabric";
 
 const rocketImageCount = 1;
 const crashImageCount = 60;
@@ -260,7 +259,6 @@ const drawStatusText = () => {
     ctx.globalAlpha = 1 - (timeElapsed - Math.floor(timeElapsed));
     fontSize *= 1 + ctx.globalAlpha;
   }
-  // if (!isRising) content = `${f(timeElapsed).toFixed(2)}x`;
   drawText(
     content,
     width > 384 ? width / 2 : ORG_X + 40,
@@ -358,10 +356,7 @@ const Rocket = (props: any) => {
   return (
     <div className="relative bg-[BACKGROUND_COLOR]" ref={props.refer}>
       <div className="blur"></div>
-      <div
-        className="blur2"
-        // style={{ width: `0}%` }}
-      ></div>
+      <div className="blur2"></div>
       <canvas
         className="mx-auto rounded-3xl"
         ref={canvasRef}

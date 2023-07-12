@@ -12,11 +12,6 @@ import { ReactComponent as MATIC } from "app/assets/svg/MATIC.svg";
 import { ReactComponent as ADA } from "app/assets/svg/ADA.svg";
 import { ReactComponent as SOL } from "app/assets/svg/SOL.svg";
 import { ReactComponent as EBONE } from "app/assets/svg/EBONE.svg";
-export const constStates = {
-  loading: "LOADING",
-  playing: "PLAYING",
-  crash: "CRASH",
-};
 
 export const initAvatar =
   "https://upcdn.io/W142hJk/image/demo/4mTLJiq7Ke.png?w=600&h=600&fit=max&q=70";
@@ -24,6 +19,23 @@ export const initAvatar =
 type CoinSVGType = {
   [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
+
+export const coins = [
+  "btc",
+  "eth",
+  "ltc",
+  "egld",
+  // "kas",
+  // "erg",
+  "xrp",
+  "bnb",
+  "usdc",
+  "usdt",
+  "matic",
+  "ada",
+  "sol",
+  "ebone",
+];
 
 export const coinSVG: CoinSVGType = {
   btc: BTC,
@@ -40,4 +52,36 @@ export const coinSVG: CoinSVGType = {
   ada: ADA,
   sol: SOL,
   ebone: EBONE,
+};
+
+export const networks = {
+  btc: ["bitcoin"],
+  eth: ["ether", "bsc"],
+  bnb: ["ether", "bsc"],
+  matic: ["ether", "bsc", "polygon"],
+  usdt: ["ether", "bsc", "polygon", "solana", "tron"],
+  usdc: ["ether", "bsc", "polygon", "solana", "tron"],
+  egld: ["mvx"],
+  ebone: ["mvx"],
+  kas: ["kaspa"],
+  erg: ["ergo"],
+  sol: ["solana"],
+  ada: ["cardano", "bsc"],
+  ltc: ["litecoin", "bsc"],
+  xrp: ["ripple", "bsc"],
+};
+
+export const networkNames = {
+  bitcoin: "Segwit",
+  ether: "Ethereum",
+  bsc: "BNB Smart Chain",
+  polygon: "Polygon",
+  tron: "Tron",
+  solana: "Solana",
+  kaspa: "Kaspa",
+  cardano: "Cardano",
+  ergo: "Ergo",
+  ripple: "Ripple",
+  mvx: "MultiversX",
+  litecoin: "Litecoin",
 };

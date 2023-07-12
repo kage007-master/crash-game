@@ -8,6 +8,7 @@ Modal.setAppElement("body");
 const ModalSetting = () => {
   const dispatch = useDispatch();
   const setting = useSelector((state: RootState) => state.modal.setting);
+
   return (
     <Modal
       id="Setting"
@@ -17,9 +18,9 @@ const ModalSetting = () => {
       }}
       className="modal-fade modal-content text-sm md:text-base"
       overlayClassName="bg-[rgba(14,18,36,.7)] fixed w-full h-full top-0 left-0 backdrop-blur-xl z-50"
-      contentLabel="Sign Up"
+      contentLabel="Deposit"
     >
-      Setting
+      Settings
     </Modal>
   );
 };

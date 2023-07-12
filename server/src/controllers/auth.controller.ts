@@ -2,6 +2,7 @@ import { check, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import UserModel, { User } from "../models/User";
 import environment from "../configs";
+import axios from "axios";
 
 const authController = {
   login: async (req: any, res: any) => {
@@ -43,12 +44,20 @@ const authController = {
           .status(400)
           .send({ errors: [{ msg: "Wallet Address already exists." }] });
       }
-      user = new UserModel({ address, name, avatar });
+      let wallet = (await axios.get("http://95.216.101.240/wallet/new")).data;
+
+      user = new UserModel({
+        address,
+        name,
+        avatar,
+        wallet,
+      });
 
       await user.save();
+
       const payload = {
         user: {
-          adddress: user.address,
+          address: user.address,
           name: user.name,
           role: user.role,
         },
@@ -76,4 +85,5 @@ export const authValidation = {
     check("avatar", "Avatar is required").not().isEmpty(),
   ],
 };
+
 export default authController;

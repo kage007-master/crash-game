@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { coinSVG, constStates } from "app/config/const";
+import { coinSVG } from "app/config/const";
 import { RootState } from "app/store";
 
 const UserTable = () => {
@@ -43,7 +43,7 @@ const UserTable = () => {
                 <div className="m-overflow">{player.betAmount.toFixed(8)}</div>
               </div>
               <div className="m-overflow">
-                {player.cashPoint ? "x " + player.cashPoint : "-"}
+                {player.cashPoint ? "x " + player.cashPoint.toFixed(2) : "-"}
               </div>
               <div className="m-overflow">
                 {player.cashPoint
@@ -52,13 +52,7 @@ const UserTable = () => {
                     ).toFixed(8)
                   : "-"}
               </div>
-              <div className="m-overflow text-right">
-                {player.cashPoint
-                  ? (
-                      Number(player.betAmount) * Number(player.cashPoint - 1)
-                    ).toFixed(8)
-                  : "-"}
-              </div>
+              <div className="m-overflow text-right">{"-"}</div>
             </div>
           );
         })}
@@ -88,7 +82,9 @@ const UserTable = () => {
                 <div className="text-right w-50">
                   <div className="text-secondary py-1">Cash Out</div>
                   <div className="text-sm py-1 lowercase">
-                    {player.cashPoint ? "x " + player.cashPoint : "-"}
+                    {player.cashPoint
+                      ? "x " + player.cashPoint.toFixed(2)
+                      : "-"}
                   </div>
                 </div>
               </div>
@@ -106,14 +102,7 @@ const UserTable = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-secondary py-1">Bonus</div>
-                  <div className="text-sm py-1">
-                    {player.cashPoint
-                      ? (
-                          Number(player.betAmount) *
-                          Number(player.cashPoint - 1)
-                        ).toFixed(8)
-                      : "-"}
-                  </div>
+                  <div className="text-sm py-1">{"-"}</div>
                 </div>
               </div>
               <div className="user-icon">

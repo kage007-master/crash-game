@@ -15,10 +15,10 @@ export const socketEvents = {
     socket.emit("auth", data);
   },
   emitBet: (data: any) => {
-    socket.emit("bet", data);
+    if (data.amount > 0) socket.emit("bet", data);
   },
   emitPromise: (data: any) => {
-    socket.emit("promise", data);
+    if (data.amount > 0) socket.emit("promise", data);
   },
   emitCancelPromise: (data: any) => {
     socket.emit("cancelPromise", data);

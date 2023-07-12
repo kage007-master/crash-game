@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { constStates } from "../config/const";
+// import { constStates } from "../config/const";
 import axios from "app/components/axios";
 
 const initialState: CrashState = {

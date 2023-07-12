@@ -20,6 +20,7 @@ import { ToastrContext } from "app/providers/ToastrProvider";
 import Dropdown from "app/components/Dropdown";
 import { getmybet } from "app/store/crash.slice";
 import { AppDispatch, RootState } from "app/store";
+import Dropmenu from "app/components/Dropmenu";
 
 const Navbar = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -49,6 +50,7 @@ const Navbar = () => {
       notify.warning("Wallert Disconnected!");
     }
   };
+
   const handleLogout = () => {
     logout();
     notify.info("Wallet Disconnected");
@@ -83,12 +85,12 @@ const Navbar = () => {
         <div className="ml-auto text-sm lg:text-base flex gap-2">
           {auth.token ? (
             <div className="flex items-center gap-2">
-              <Dropdown handleLogout={handleLogout}></Dropdown>
+              <Dropdown />
             </div>
           ) : (
             <>
               <button
-                className="m-rounded px-5 py-2 text-xs md:text-base hover:bg-card anim"
+                className="m-rounded px-5 py-4 text-xs md:text-base hover:bg-card anim"
                 onClick={() => {
                   dispatch(setWalletConnect(true));
                   dispatch(setLogin(true));
@@ -97,7 +99,7 @@ const Navbar = () => {
                 Login
               </button>
               <button
-                className="m-rounded px-5 py-2 text-xs md:text-base hover:bg-indigoBright anim bg-indigo text-white "
+                className="m-rounded px-5 py-4 text-xs md:text-base hover:bg-indigoBright anim bg-indigo text-white "
                 onClick={() => {
                   dispatch(setSignUp(true));
                 }}
@@ -106,12 +108,12 @@ const Navbar = () => {
               </button>
             </>
           )}
-          <div className="m-rounded p-3 md:p-4 cursor-pointer anim hover:bg-card">
-            <Iconify
-              icon="mdi:bell-outline"
-              className={" w-6 h-6 cursor-pointer"}
-            ></Iconify>
-          </div>
+          {auth.token && (
+            <Dropmenu
+              className="relative m-rounded rounded-full md:p-1 cursor-pointer anim hover:bg-card"
+              handleLogout={handleLogout}
+            />
+          )}
         </div>
       </div>
       <button

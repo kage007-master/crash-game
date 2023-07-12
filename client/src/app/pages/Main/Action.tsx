@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { coinSVG, constStates } from "app/config/const";
+import { coinSVG } from "app/config/const";
 import { socketEvents } from "app/providers/socket";
 import NumberInput from "app/components/NumberInput";
 import Iconify from "app/components/Iconify";
@@ -35,9 +35,13 @@ const Action = (props: any) => {
   });
   const MainCoin = coinSVG[chain];
   useEffect(() => {
-    setBetAmount(
-      Math.min(Number(minBetAmount), Number(maxBetAmount)).toFixed(8)
-    );
+    if (
+      Number(betAmount) > Number(maxBetAmount) ||
+      Number(betAmount) < Number(minBetAmount)
+    )
+      setBetAmount(
+        Math.min(Number(minBetAmount), Number(maxBetAmount)).toFixed(8)
+      );
     return () => {};
   }, [maxBetAmount]);
 
@@ -138,11 +142,10 @@ const Action = (props: any) => {
             }}
             className="bg-card p-3 md:p-4 outline-none m-rounded flex-none flex items-center justify-center hover:bg-border anim"
           >
-            {isAutoCash ? (
-              <Iconify icon={"clarity:unlock-line"} className={"w-6 h-6"} />
-            ) : (
-              <Iconify icon={"clarity:lock-line"} className={"w-6 h-6"} />
-            )}
+            <Iconify
+              icon={isAutoCash ? "clarity:unlock-line" : "clarity:lock-line"}
+              className={"w-6 h-6"}
+            />
           </button>
         </div>
       </div>

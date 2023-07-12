@@ -10,6 +10,9 @@ interface ModalState {
   chain: TCoin;
   chat: boolean;
   screenshot: boolean;
+  deposit: boolean;
+  withdraw: boolean;
+  swap: boolean;
 }
 
 const initialState: ModalState = {
@@ -22,6 +25,9 @@ const initialState: ModalState = {
   chain: "ebone",
   chat: false,
   screenshot: false,
+  deposit: false,
+  withdraw: false,
+  swap: false,
 };
 
 export const slice = createSlice({
@@ -55,6 +61,15 @@ export const slice = createSlice({
     setChat: (state, action) => {
       state.chat = action.payload;
     },
+    setDeposit: (state, action) => {
+      state.deposit = action.payload;
+    },
+    setWithdraw: (state, action) => {
+      state.withdraw = action.payload;
+    },
+    setSwap: (state, action) => {
+      state.swap = action.payload;
+    },
   },
 });
 
@@ -68,6 +83,9 @@ export const {
   setChain,
   setScreenshot,
   setChat,
+  setDeposit,
+  setWithdraw,
+  setSwap,
 } = slice.actions;
 
 export default slice.reducer;

@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 const NumberInput = (props: any) => {
   const handleChange = (e: any) => {
     if (isNaN(Number(e))) return;
