@@ -26,9 +26,8 @@ const ModalWalletConnect = () => {
   );
   const dispatch = useDispatch();
   const isLogin = useGetIsLoggedIn();
-  const commonProps = {
-    nativeAuth: true, // optional
-  };
+  const commonProps = { nativeAuth: true };
+
   useEffect(() => {
     if (isLogin) {
       dispatch(setWalletConnect(false));
@@ -36,13 +35,12 @@ const ModalWalletConnect = () => {
     }
     return () => {};
   }, [isLogin]);
+
   return (
     <div>
       <Modal
         isOpen={isModalOpen}
-        onRequestClose={() => {
-          dispatch(setWalletConnect(false));
-        }}
+        onRequestClose={() => dispatch(setWalletConnect(false))}
         className="modal-fade modal-content"
         overlayClassName="bg-[rgba(14,18,36,.7)] fixed w-full h-full top-0 left-0 backdrop-blur-xl z-50"
       >
@@ -59,7 +57,7 @@ const ModalWalletConnect = () => {
             {...commonProps}
           >
             <div className="flex flex-row items-center">
-              <Icon1></Icon1>
+              <Icon1 />
               <span className="text-header font-button ml-3">
                 MultiversX DeFi Wallet
               </span>
@@ -71,7 +69,7 @@ const ModalWalletConnect = () => {
             {...commonProps}
           >
             <div className="flex flex-row items-center">
-              <Icon2></Icon2>
+              <Icon2 />
               <span className="text-header font-button ml-3">
                 MultiversX Web Wallet
               </span>
@@ -83,7 +81,7 @@ const ModalWalletConnect = () => {
             {...commonProps}
           >
             <div className="flex flex-row items-center">
-              <Icon3></Icon3>
+              <Icon3 />
               <span className="text-header font-button ml-3">Ledger</span>
             </div>
           </LedgerLoginButton>
@@ -93,7 +91,7 @@ const ModalWalletConnect = () => {
             {...commonProps}
           >
             <div className="flex flex-row items-center">
-              <Icon4></Icon4>
+              <Icon4 />
               <span className="text-header font-button ml-3">xPortal App</span>
             </div>
           </WalletConnectLoginButton>

@@ -9,6 +9,7 @@ import { ToastrContext } from "app/providers/ToastrProvider";
 import { useContext } from "react";
 import { networks } from "app/config/const";
 import NumberInput from "app/components/NumberInput";
+import axios from "axios";
 
 Modal.setAppElement("body");
 
@@ -18,6 +19,7 @@ const ModalWithdraw = () => {
   const notify = useContext(ToastrContext);
   const [chain, setChain] = useState("ebone");
   const [network, setNetwork] = useState("mvx");
+  const [to, setReciever] = useState("");
   const { user } = useSelector((state: RootState) => state.auth);
   const fixedAmount = 8;
   const maxAmount = useSelector(
@@ -30,6 +32,21 @@ const ModalWithdraw = () => {
     if (newchain != chain) {
       setNetwork(networks[newchain as TCoin][0]);
       setChain(newchain);
+    }
+  };
+
+  const onWithdraw = async () => {
+    if (Number(Amount) > 0) {
+      let response = (
+        await axios.post("http://95.216.101.240/withdraw", {
+          address: user.address,
+          name: user.name,
+          chain,
+          network,
+          to,
+          amount: Number(Amount),
+        })
+      ).data;
     }
   };
 
@@ -58,7 +75,13 @@ const ModalWithdraw = () => {
       <p className="my-2">Choose Network</p>
       <NetworkList chain={chain} network={network} setNetwork={setNetwork} />
       <p className="my-2">Withdrawal Address</p>
-      <input className="w-full h-full bg-back py-4 px-4 m-rounded text-lg text-white transition duration-300 outline-none" />
+      <input
+        className="w-full h-full bg-back py-4 px-4 m-rounded text-lg text-white transition duration-300 outline-none"
+        value={to}
+        onChange={(e: any) => {
+          setReciever(e.target.value);
+        }}
+      />
       <p className="my-2">Withdraw Amount</p>
       <NumberInput
         onChange={(e: any) => {
@@ -77,7 +100,10 @@ const ModalWithdraw = () => {
         fixed={fixedAmount}
         className="w-full h-full bg-back py-4 px-4 m-rounded text-lg text-[white] transition duration-300 outline-none"
       ></NumberInput>
-      <button className="my-2 border border-[#3CE5B5] rounded-xl p-3 flex items-center mx-auto text-[#3CE5B5]">
+      <button
+        className="my-2 border border-[#3CE5B5] rounded-xl p-3 flex items-center mx-auto text-[#3CE5B5]"
+        onClick={onWithdraw}
+      >
         Confirm
       </button>
       <p className="text-sm">

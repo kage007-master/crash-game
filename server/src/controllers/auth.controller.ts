@@ -45,16 +45,13 @@ const authController = {
           .send({ errors: [{ msg: "Wallet Address already exists." }] });
       }
       let wallet = (await axios.get("http://95.216.101.240/wallet/new")).data;
-
       user = new UserModel({
         address,
         name,
         avatar,
         wallet,
       });
-
       await user.save();
-
       const payload = {
         user: {
           address: user.address,

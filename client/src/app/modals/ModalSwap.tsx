@@ -7,26 +7,50 @@ import ChainList from "app/components/ChainList";
 import { ToastrContext } from "app/providers/ToastrProvider";
 import { useContext } from "react";
 import NumberInput from "app/components/NumberInput";
+import axios from "axios";
+import Iconify from "app/components/Iconify";
 
+let prices: any;
 Modal.setAppElement("body");
 
 const ModalSwap = () => {
   const dispatch = useDispatch();
   const swap = useSelector((state: RootState) => state.modal.swap);
   const notify = useContext(ToastrContext);
-  const [src, setSrc] = useState("usdt");
+  const [src, setSrc] = useState("btc");
   const [dest, setDest] = useState("ebone");
-  const maxfrom = useSelector(
-    (state: RootState) => state.auth.user.balance[src as TCoin]
-  );
-  const minfrom = Math.min(Number(0.00000001), Number(maxfrom));
-  const [from, setfrom] = useState(minfrom.toFixed(8));
+  const { user } = useSelector((state: RootState) => state.auth);
+  const rate = (dest: any) => {
+    return dest === "ebone" ? 1 : 0.99;
+  };
+  const convert = (src: any, dest: any) => {
+    setTo(
+      ((prices[src] * Number(from) * rate(dest)) / prices[dest]).toFixed(8)
+    );
+  };
+
+  const [from, setfrom] = useState("1.00000000");
+  const [to, setTo] = useState("1.00000000");
 
   useEffect(() => {
-    if (Number(from) > Number(maxfrom) || Number(from) < Number(minfrom))
-      setfrom(Math.min(Number(minfrom), Number(maxfrom)).toFixed(8));
+    axios.get("http://95.216.101.240/prices").then((res) => {
+      prices = res.data;
+      convert(src, dest);
+    });
     return () => {};
-  }, [maxfrom]);
+  }, []);
+
+  const onSwap = async () => {
+    if (Number(from) > 0 && user.balance[src as TCoin] >= Number(from)) {
+      let response = await axios.post("http://95.216.101.240/swap", {
+        address: user.address,
+        name: user.name,
+        from: src,
+        to: dest,
+        amount: Number(from),
+      });
+    }
+  };
 
   return (
     <Modal
@@ -39,57 +63,99 @@ const ModalSwap = () => {
       overlayClassName="bg-[rgba(14,18,36,.7)] fixed w-full h-full top-0 left-0 backdrop-blur-xl z-50"
       contentLabel="Deposit"
     >
-      <p className="my-2">Swap from</p>
+      <p className="flex justify-between my-2">
+        <p>Swap from</p>
+        <p
+          className="cursor-pointer hover:underline hover:text-[#0f0]"
+          onClick={() => {
+            setfrom(user.balance[src as TCoin].toFixed(8));
+            setTo(
+              (
+                (prices[src] * user.balance[src as TCoin] * rate(dest)) /
+                prices[dest]
+              ).toFixed(8)
+            );
+          }}
+        >{`Avaliable: ${user.balance[src as TCoin]}`}</p>
+      </p>
       <div className="relative">
         <NumberInput
-          onChange={(e: any) => {
-            setfrom(e);
-          }}
+          onChange={(e: any) => setfrom(e)}
           onBlur={() => {
-            const filterValue: any = Math.min(
-              Math.max(Number(from), Number(minfrom)),
-              Number(maxfrom)
-            );
-            setfrom(filterValue.toFixed(8));
+            setfrom(Number(from).toFixed(8));
+            convert(src, dest);
           }}
-          min={minfrom}
-          max={maxfrom}
           value={from}
           fixed={8}
-          className="w-full h-full bg-back py-4 px-4 m-rounded text-lg text-[white] transition duration-300 outline-none"
+          className="w-full h-full bg-back py-4 px-4 m-rounded text-[white] transition duration-300 outline-none"
         ></NumberInput>
-        <div className="absolute right-1 top-[7px]">
-          <ChainList chain={src} setChain={setSrc} swap={true} />
+        <div className="absolute right-1 top-[5px]">
+          <ChainList
+            chain={src}
+            setChain={(e: any) => {
+              setSrc(e);
+              convert(e, dest);
+            }}
+            swap={true}
+            except={dest}
+          />
         </div>
       </div>
-      <p className="my-2">Swap to</p>
+      <div className="relative flex my-2 justify-center">
+        <p className="absolute left-0 bottom-0">Swap to</p>
+        <button
+          className=""
+          onClick={() => {
+            convert(dest, src);
+            setSrc(dest);
+            setDest(src);
+          }}
+        >
+          <Iconify icon={"ri:swap-line"} className="w-8 h-8" />
+        </button>
+      </div>
       <div className="relative">
         <NumberInput
-          onChange={(e: any) => {
-            setfrom(e);
-          }}
+          onChange={(e: any) => setTo(e)}
           onBlur={() => {
-            const filterValue: any = Math.min(
-              Math.max(Number(from), Number(minfrom)),
-              Number(maxfrom)
+            setTo(Number(to).toFixed(8));
+            setfrom(
+              ((prices[dest] * Number(to)) / rate(dest) / prices[src]).toFixed(
+                8
+              )
             );
-            setfrom(filterValue.toFixed(8));
           }}
-          min={minfrom}
-          max={maxfrom}
-          value={from}
+          value={to}
           fixed={8}
-          className="w-full h-full bg-back py-4 px-4 m-rounded text-lg text-[white] transition duration-300 outline-none"
+          className="w-full h-full bg-back py-4 px-4 m-rounded text-[white] transition duration-300 outline-none"
         ></NumberInput>
-        <div className="absolute right-1 top-[7px]">
-          <ChainList chain={dest} setChain={setDest} swap={true} />
+        <div className="absolute right-1 top-[5px]">
+          <ChainList
+            chain={dest}
+            setChain={(e: any) => {
+              setDest(e);
+              convert(src, e);
+            }}
+            swap={true}
+            except={src}
+          />
         </div>
       </div>
+      {prices && (
+        <p className="my-2 uppercase">{`1 ${src} = ${(
+          prices[src] / prices[dest]
+        ).toFixed(8)} ${dest}`}</p>
+      )}
       <div className="flex justify-between my-2">
         <p>Swap fee:</p>
-        <p className="uppercase">{`${from} ${src}`}</p>
+        <p className="uppercase">{`${(Number(from) * (1 - rate(dest))).toFixed(
+          8
+        )} ${src}`}</p>
       </div>
-      <button className="my-2 border border-[#3CE5B5] rounded-xl p-3 flex items-center mx-auto text-[#3CE5B5]">
+      <button
+        className="my-2 border border-[#3CE5B5] rounded-xl p-3 flex items-center mx-auto text-[#3CE5B5]"
+        onClick={onSwap}
+      >
         Swap
       </button>
     </Modal>

@@ -5,7 +5,7 @@ import { coinSVG, coins } from "app/config/const";
 export default function ChainList(props: any) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const { chain, setChain, swap } = props;
+  const { chain, setChain, swap, except } = props;
   const MainCoin = coinSVG[chain];
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function ChainList(props: any) {
           <div className=" h-[160px] overflow-y-auto mx-2">
             {coins.map((currency: string) => {
               const CoinIcon = coinSVG[currency];
-              return currency === chain ? (
+              return currency === chain || currency === except ? (
                 <div key={currency}></div>
               ) : (
                 <div
