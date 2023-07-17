@@ -26,8 +26,8 @@ const options = {
   cert: fs.readFileSync("ssl/certificate.pem"),
 };
 
-//const httpServer = https.createServer(options, app);
-const httpServer = new http.Server(app);
+const httpServer = https.createServer(options, app);
+// const httpServer = new http.Server(app);
 const io = new SocketIO.Server(httpServer, {
   cors: { methods: ["GET", "POST"] },
 }).of("/crash");

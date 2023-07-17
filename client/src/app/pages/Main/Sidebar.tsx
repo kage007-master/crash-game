@@ -82,7 +82,7 @@ const Sidebar = () => {
         </div>
         <div className="hover:bg-card menu-item">
           <Spade className="w-5" />
-          <div>Pocker</div>
+          <div>Poker</div>
         </div>
         <div className="hover:bg-card menu-item active">
           <Rocket className="w-5" />

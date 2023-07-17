@@ -66,7 +66,7 @@ const ModelSchema = new Schema({
     matic: { type: Number, default: 0.0 },
     ada: { type: Number, default: 0.0 },
     sol: { type: Number, default: 0.0 },
-    ebone: { type: Number, default: 100.0 },
+    ebone: { type: Number, default: 0.0 },
   },
   avatar: { type: String },
   role: { type: String, default: "user" },

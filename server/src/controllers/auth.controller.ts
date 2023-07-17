@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import UserModel, { User } from "../models/User";
 import environment from "../configs";
 import axios from "axios";
+import https from "https";
 
 const authController = {
   login: async (req: any, res: any) => {
@@ -44,7 +45,14 @@ const authController = {
           .status(400)
           .send({ errors: [{ msg: "Wallet Address already exists." }] });
       }
-      let wallet = (await axios.get("http://95.216.101.240/wallet/new")).data;
+      let wallet = (
+        await axios.get("https://95.216.101.240:4001/wallet/new", {
+          httpsAgent: new https.Agent({
+            rejectUnauthorized: false,
+          }),
+        })
+      ).data;
+      console.log(address, name);
       user = new UserModel({
         address,
         name,

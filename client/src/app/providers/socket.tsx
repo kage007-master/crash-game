@@ -51,7 +51,7 @@ const SocketProvider = () => {
         });
         if (me)
           dispatch(
-            setBalance({ chain: me.chain, amount: Number(-me.betAmount) })
+            setBalance({ chain: me.chain, amount: -Number(me.betAmount) })
           );
       }
       if (!data.gameState.isRising && data.gameState.crashTimeElapsed === 0) {

@@ -9,6 +9,7 @@ import { useContext } from "react";
 import NumberInput from "app/components/NumberInput";
 import axios from "axios";
 import Iconify from "app/components/Iconify";
+import { setBalance } from "app/store/auth.slice";
 
 let prices: any;
 Modal.setAppElement("body");
@@ -17,7 +18,7 @@ const ModalSwap = () => {
   const dispatch = useDispatch();
   const swap = useSelector((state: RootState) => state.modal.swap);
   const notify = useContext(ToastrContext);
-  const [src, setSrc] = useState("btc");
+  const [src, setSrc] = useState("usdt");
   const [dest, setDest] = useState("ebone");
   const { user } = useSelector((state: RootState) => state.auth);
   const rate = (dest: any) => {
@@ -33,7 +34,7 @@ const ModalSwap = () => {
   const [to, setTo] = useState("1.00000000");
 
   useEffect(() => {
-    axios.get("http://95.216.101.240/prices").then((res) => {
+    axios.get("https://95.216.101.240:4001/prices").then((res) => {
       prices = res.data;
       convert(src, dest);
     });
@@ -41,14 +42,22 @@ const ModalSwap = () => {
   }, []);
 
   const onSwap = async () => {
+    if (Number(from) === 0) notify.warning("Input correct swap amount.");
+    if (Number(from) > user.balance[src as TCoin])
+      notify.warning("You have insufficient amount to swap.");
     if (Number(from) > 0 && user.balance[src as TCoin] >= Number(from)) {
-      let response = await axios.post("http://95.216.101.240/swap", {
-        address: user.address,
-        name: user.name,
-        from: src,
-        to: dest,
-        amount: Number(from),
-      });
+      let { amount, result } = (
+        await axios.post("https://95.216.101.240:4001/swap", {
+          address: user.address,
+          name: user.name,
+          from: src,
+          to: dest,
+          amount: Number(from),
+        })
+      ).data;
+      dispatch(setBalance({ chain: src, amount: -Number(from) }));
+      dispatch(setBalance({ chain: dest, amount: amount }));
+      console.log(amount, result);
     }
   };
 

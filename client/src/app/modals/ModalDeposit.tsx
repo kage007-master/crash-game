@@ -9,6 +9,7 @@ import { ToastrContext } from "app/providers/ToastrProvider";
 import { useContext, useState } from "react";
 import { networks } from "app/config/const";
 import { QRCodeSVG } from "qrcode.react";
+import { shortenAddress } from "app/utils/util";
 
 Modal.setAppElement("body");
 
@@ -63,7 +64,9 @@ const ModalDeposit = () => {
               className="p-2 mx-auto bg-white"
               value={user.wallet[network].address}
             />
-            <p className="truncate p-2">{user.wallet[network].address}</p>
+            <p className="truncate p-2">
+              {shortenAddress(user.wallet[network].address)}
+            </p>
             <button
               className="my-2 border border-[#3CE5B5] rounded-xl p-3 flex items-center mx-auto text-[#3CE5B5]"
               onClick={copyStringToClipboard}

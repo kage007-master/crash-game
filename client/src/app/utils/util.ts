@@ -7,6 +7,13 @@ export const shortenName = (name: string) => {
     : name.slice(0, 4) + "..." + name.slice(-3);
 };
 
+export const shortenAddress = (address: string) => {
+  if (!address || !address.length) return "";
+  return address.length < 20
+    ? address.length
+    : address.slice(0, 15) + "..." + address.slice(-15);
+};
+
 export const getTimeAgo = (timestamp: Date) => {
   return moment(timestamp).format("h:mm a");
 };

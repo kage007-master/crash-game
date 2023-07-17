@@ -71,6 +71,40 @@ export const networks = {
   xrp: ["ripple", "bsc"],
 };
 
+export const limits: Record<TCoin, any> = {
+  btc: { bitcoin: 0.0021 },
+  eth: { ether: 0.025, bsc: 0.012 },
+  bnb: { ether: 0.125, bsc: 0.11 },
+  matic: { ether: 60, bsc: 30, polygon: 30 },
+  usdt: { ether: 48, bsc: 24, polygon: 24, solana: 24, tron: 24 },
+  usdc: { ether: 48, bsc: 24, polygon: 24, solana: 24, tron: 24 },
+  egld: { mvx: 1.25 },
+  ebone: { mvx: 22 },
+  sol: { solana: 1.1 },
+  ada: { cardano: 21, bsc: 21 },
+  ltc: { litecoin: 0.25, bsc: 0.25 },
+  xrp: { litecoin: 11, bsc: 11 },
+  erg: { ergo: 1 },
+  kas: { kaspa: 1 },
+};
+
+export const fees: Record<TCoin, any> = {
+  btc: { bitcoin: 0.0001 },
+  eth: { ether: 0.005, bsc: 0.002 },
+  bnb: { ether: 0.025, bsc: 0.01 },
+  matic: { ether: 10, bsc: 5, polygon: 5 },
+  usdt: { ether: 8, bsc: 4, polygon: 4, solana: 4, tron: 4 },
+  usdc: { ether: 8, bsc: 4, polygon: 4, solana: 4, tron: 4 },
+  egld: { mvx: 0.05 },
+  ebone: { mvx: 2 },
+  sol: { solana: 0.1 },
+  ada: { cardano: 1, bsc: 1 },
+  ltc: { litecoin: 0.05, bsc: 0.05 },
+  xrp: { litecoin: 1, bsc: 1 },
+  erg: { ergo: 1 },
+  kas: { kaspa: 1 },
+};
+
 export const networkNames = {
   bitcoin: "Segwit",
   ether: "Ethereum",
