@@ -19,9 +19,12 @@ var crashTimeElapsed = 0;
 var GameID = "";
 var players: Player[] = [];
 var waitings: Player[] = [];
+let totalBet = 0;
+let remain = 0;
 
 export const startNewRound = (io: any) => {
   players = waitings;
+  totalBet = 0;
   players.map(async (player: Player) => {
     let user: any = await UserModel.findOne({ address: player.address });
     if (user && user.balance) {
@@ -29,6 +32,7 @@ export const startNewRound = (io: any) => {
       user.balance[player.chain] = Number(
         user.balance[player.chain].toFixed(8)
       );
+      totalBet += player.betAmount;
       user.save();
     }
   });
@@ -36,7 +40,7 @@ export const startNewRound = (io: any) => {
   isRising = true;
   timeElapsed = 0;
   let timerId = setInterval(() => {
-    if (isRising && timeElapsed > 10 && Math.random() < 0.005) {
+    if (isRising && timeElapsed > 5 && Math.random() < 0.005) {
       isRising = false;
       crashTimeElapsed = 0;
       var newGame = new GameHistoryModel({

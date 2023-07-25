@@ -52,6 +52,7 @@ interface Player {
 interface Message {
   text: string;
   address: string;
+  name: string;
   avatar: string;
   time: Date;
 }

@@ -55,9 +55,7 @@ const Chat = () => {
                   }`}
                 >
                   <p className="text-white mr-2">
-                    {message.address === user.address
-                      ? "You"
-                      : shortenName(message.address)}
+                    {message.address === user.address ? "You" : message.name}
                   </p>
                   {getTimeAgo(message.time)}
                 </div>
@@ -86,7 +84,7 @@ const Chat = () => {
           }
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.code === "Enter") {
-              socketEvents.emitMessage(text);
+              socketEvents.emitMessage(text, user.name);
               setText("");
             }
           }}
@@ -97,7 +95,7 @@ const Chat = () => {
         <button
           className="w-[48px] h-[48px] text-center justify-center flex items-center bg-[url('app/assets/images/button2.png')] bg-[length:100%_100%] text-white rounded-full text-xs md:text-base relative transition-all duration-300 hover:shadow-[0_0_15px_5px_#818cf850]"
           onClick={() => {
-            socketEvents.emitMessage(text);
+            socketEvents.emitMessage(text, user.name);
             setText("");
           }}
         >

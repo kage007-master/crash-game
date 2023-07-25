@@ -26,8 +26,8 @@ export const socketEvents = {
   emitCashOut: (data: any) => {
     socket.emit("cashOut", data);
   },
-  emitMessage: (message: string) => {
-    if (message.length) socket.emit("message", { text: message });
+  emitMessage: (message: string, name: string) => {
+    if (message.length) socket.emit("message", { text: message, name });
   },
 };
 

@@ -76,9 +76,9 @@ const ModalDeposit = () => {
             </button>
           </div>
           <p className="text-sm">
-            <span className="text-white">Notice:</span> Send only ETH to this
-            deposit address. Coins will be deposited automatically after 6
-            network confirmations
+            <span className="text-white">Notice:</span> Send only{" "}
+            {chain.toUpperCase()} to this deposit address. Coins will be
+            deposited automatically after 6 network confirmations
           </p>
         </>
       )}

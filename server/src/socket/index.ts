@@ -16,50 +16,7 @@ interface Message {
   time: Date;
 }
 
-const messages: Message[] = [
-  {
-    text: "Ok. Ill wait",
-    address: "bY3f1..12",
-    avatar: "avatar/avatar2.png",
-    time: new Date(),
-  },
-  {
-    text: "Pellentesque vulputate placerat sem, semper risus sollicitudin vitae. Integereu dignissim eros, et dictum sem.",
-    address: "bY3f1..12",
-    avatar: "avatar/avatar1.png",
-    time: new Date(),
-  },
-  {
-    text: "Nam lobortis iaculis hendrerit.",
-    address: "bY3f1..12",
-    avatar: "avatar/avatar2.png",
-    time: new Date(),
-  },
-  {
-    text: "Pellentesque mi massa, commodo nonvelit ut, venenatis dapibus tellus.",
-    address: "bY3f1..12",
-    avatar: "avatar/avatar3.png",
-    time: new Date(),
-  },
-  {
-    text: "Fusce eget interdum massa, nongravida nisi. Donec eget orci sapienbibendum viverra nec in nisi.",
-    address: "bY3f1..12",
-    avatar: "avatar/avatar4.png",
-    time: new Date(),
-  },
-  {
-    text: "Suspendisse potenti.",
-    address: "bY3f1..12",
-    avatar: "avatar/avatar4.png",
-    time: new Date(),
-  },
-  {
-    text: "Curabitur non efficitur orci, sagittisplacerat lectus.",
-    address: "bY3f1..12",
-    avatar: "avatar/avatar3.png",
-    time: new Date(),
-  },
-];
+const messages: Message[] = [];
 
 const socketProvider = (io: any) => {
   startNewRound(io);

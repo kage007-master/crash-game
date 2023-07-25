@@ -18,6 +18,8 @@ const authController = {
         return res
           .status(400)
           .send({ errors: [{ msg: "User does not exist." }] });
+      console.log(address, user.name);
+
       const payload = {
         user: {
           address: user.address,
