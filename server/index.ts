@@ -21,13 +21,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-const options = {
-  key: fs.readFileSync("ssl/key.pem"),
-  cert: fs.readFileSync("ssl/certificate.pem"),
-};
+// const options = {
+//   key: fs.readFileSync("ssl/key.pem"),
+//   cert: fs.readFileSync("ssl/certificate.pem"),
+// };
 
-const httpServer = https.createServer(options, app);
-// const httpServer = new http.Server(app);
+// const httpServer = https.createServer(options, app);
+const httpServer = new http.Server(app);
 const io = new SocketIO.Server(httpServer, {
   cors: { methods: ["GET", "POST"] },
 }).of("/crash");

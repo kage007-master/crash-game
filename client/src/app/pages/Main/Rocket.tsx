@@ -283,7 +283,7 @@ const drawStatusText = () => {
 const draw = () => {
   ctx.clearRect(0, 0, width, height);
   let W = Math.max(10, timeElapsed * 1.1);
-  let H = Math.max(2, f(timeElapsed) * 1.3);
+  let H = Math.max(3, f(timeElapsed) * 1.3);
 
   drawBackground();
   drawStatusText();

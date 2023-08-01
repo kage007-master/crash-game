@@ -20,14 +20,15 @@ const ModalDeposit = () => {
   const [chain, setChain] = useState("ebone");
   const [network, setNetwork] = useState("mvx");
   const { user } = useSelector((state: RootState) => state.auth);
-  const copyStringToClipboard = () => {
-    const handler = (event: any) => {
-      event.clipboardData.setData("text/plain", user.wallet[network].address);
-      event.preventDefault();
-      document.removeEventListener("copy", handler, true);
-    };
-    document.addEventListener("copy", handler, true);
-    document.execCommand("copy");
+  const copyStringToClipboard = async () => {
+    await navigator.clipboard.writeText(user.wallet[network].address);
+    // const handler = (event: any) => {
+    //   event.clipboardData.setData("text/plain", user.wallet[network].address);
+    //   event.preventDefault();
+    //   document.removeEventListener("copy", handler, true);
+    // };
+    // document.addEventListener("copy", handler, true);
+    // document.execCommand("copy");
     notify.info("Copied!");
   };
   const onSetChain = (newchain: string) => {
